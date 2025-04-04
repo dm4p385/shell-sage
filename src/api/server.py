@@ -1,9 +1,8 @@
 import threading
 from concurrent import futures
 import grpc
-import shellsage_pb2
-import shellsage_pb2_grpc
 
+from src.protobuf import shellsage_pb2, shellsage_pb2_grpc
 from src.prediction_engine.engine import ShellSageCore
 from src.utils.logger import setup_logger
 
