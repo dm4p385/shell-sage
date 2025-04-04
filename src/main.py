@@ -33,8 +33,9 @@ class ShellSage:
     async def get_llm_results(self, query, candidates):
         if not candidates:
             return []
+        candidates = list(dict.fromkeys(candidates))[:5]  # deduplicate + truncate
 
-        candidates = candidates[:5]  # Limit LLM input to top 5 candidates
+        # candidates = candidates[:5]  # Limit LLM input to top 5 candidates
         start_time = time.time()
 
         results = await self.llm_completion.refine(query, candidates)
