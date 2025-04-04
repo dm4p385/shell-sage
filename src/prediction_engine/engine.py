@@ -43,12 +43,10 @@ class ShellSageCore:
         lookup_embedding = self.faiss_cache.generate_key_embedding(query, candidates)
         cached_results = self.faiss_cache.lookup(lookup_embedding)
         if cached_results:
-            logger.info("Cache hit")
             elapsed = time.time() - start_time
             logger.info(f"LLMCompletion found {len(cached_results)} cached results in {elapsed:.3f}s")
             return cached_results
 
-        logger.info("Cache miss")
         results = await self.llm_completion.refine(query, candidates)
         self.faiss_cache.add(lookup_embedding, results)
         self.faiss_cache.save()
@@ -68,7 +66,7 @@ class ShellSageCore:
 
         logger.info("Returning Ranked Suggestions...")
         if final_suggestions:
-            return final_suggestions
+            return final_suggestions[:5]
             # for idx, suggestion in enumerate(final_suggestions, 1):
             #     logger.info(f"{idx}. {suggestion}")
         else:
