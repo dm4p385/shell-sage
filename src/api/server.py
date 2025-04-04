@@ -3,13 +3,16 @@ import grpc
 import shellsage_pb2
 import shellsage_pb2_grpc
 
+from src.prediction_engine.engine import ShellSageCore
+
 # connect to core here
 def get_suggestions(prompt):
-    return [
-        f"{prompt} --help",
-        f"{prompt} build",
-        f"{prompt} run"
-    ]
+    # return [
+    #     f"{prompt} --help",
+    #     f"{prompt} build",
+    #     f"{prompt} run"
+    # ]
+
 
 # Streaming version of ShellSageServicer
 class ShellSageServicer(shellsage_pb2_grpc.ShellSageServiceServicer):

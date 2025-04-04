@@ -10,7 +10,7 @@ from src.prediction_engine.utils.logger import setup_logger  # assuming you crea
 
 logger = setup_logger()
 
-class ShellSage:
+class ShellSageCore:
     def __init__(self):
         self.data_loader = DataLoader()
         self.command_history = self.data_loader.commands
@@ -84,4 +84,4 @@ class ShellSage:
 
 
 if __name__ == "__main__":
-    asyncio.run(ShellSage().run())
+    asyncio.run(ShellSageCore().run())
