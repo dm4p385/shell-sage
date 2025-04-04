@@ -1,3 +1,4 @@
+import signal
 import threading
 from concurrent import futures
 
@@ -42,7 +43,20 @@ def serve():
     server.add_insecure_port('[::]:50051')
     server.start()
     logger.info("Streaming ShellSage server running on port 50051...")
-    server.wait_for_termination()
 
+    # Setup graceful shutdown
+    shutdown_event = threading.Event()
+
+    def handle_sigterm(*_):
+        logger.info("Shutdown signal received. Shutting down gracefully...")
+        shutdown_event.set()
+        server.stop(grace=5)  # Wait 5 seconds for ongoing RPCs
+
+    # Catch Ctrl+C and SIGTERM
+    signal.signal(signal.SIGINT, handle_sigterm)
+    signal.signal(signal.SIGTERM, handle_sigterm)
+
+    shutdown_event.wait()
+    logger.info("Server has shut down.")
 if __name__ == '__main__':
     serve()
