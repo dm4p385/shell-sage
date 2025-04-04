@@ -1,6 +1,9 @@
 import json
 import ollama
 import asyncio
+from src.utils.logger import setup_logger
+
+logger = setup_logger()
 
 
 class LLMCompletion:
@@ -9,6 +12,7 @@ class LLMCompletion:
 
     async def refine(self, query, candidates, top_k=5):
         if not candidates:
+            logger.debug("No candidates provided for refinement.")
             return []
 
         system_prompt = (
@@ -24,7 +28,7 @@ class LLMCompletion:
         The user typed: '{query}'
 
         Here are some possible completions: {candidates}
-        
+
         Now respond with a JSON list of 3 refined suggestions. Do not include explanations or formatting.
         Focus more on completing the current word and predicting the next word rather than providing a complete command
         Example:
@@ -32,7 +36,6 @@ class LLMCompletion:
         """
 
         try:
-            # Run in background thread to avoid blocking asyncio loop
             response = await asyncio.to_thread(
                 ollama.chat,
                 model=self.ollama_model,
@@ -43,12 +46,15 @@ class LLMCompletion:
             )
 
             raw_output = response["message"]["content"].strip()
-            print(f"[DEBUG] Raw output: {raw_output}")
+            logger.debug(f"Raw output from Ollama: {raw_output}")
 
-            # Try to parse as JSON
             refined = json.loads(raw_output)
-            return refined[:top_k] if isinstance(refined, list) else candidates[:top_k]
+            if not isinstance(refined, list):
+                logger.warning("LLM response is not a list. Falling back to candidates.")
+                return candidates[:top_k]
+
+            return refined[:top_k]
 
         except Exception as e:
-            print(f"[ERROR] LLM refine failed: {e}")
+            logger.error(f"LLM refine failed: {e}")
             return candidates[:top_k]
