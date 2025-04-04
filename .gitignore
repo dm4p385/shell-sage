@@ -1,3 +1,5 @@
 .idea/*
 commands.pkl
 faiss_index.bin
+faiss_store/
+llm_cache/
