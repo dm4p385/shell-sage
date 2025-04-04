@@ -1,5 +1,7 @@
 import threading
 from concurrent import futures
+
+import asyncio
 import grpc
 
 from src.protobuf import shellsage_pb2, shellsage_pb2_grpc
@@ -13,11 +15,17 @@ logger = setup_logger()
 class ShellSageServicer(shellsage_pb2_grpc.ShellSageServiceServicer):
     def __init__(self):
         self.engine = ShellSageCore()
-        logger.info(f"ShellSageServicer initialized! {threading.get_ident()}")
+        logger.info(f"ShellSageServicer initialized! thread: {threading.get_ident()}")
 
     def get_suggestions(self, prompt):
-        results = self.engine.process_query(prompt)
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        results = loop.run_until_complete(self.engine.process_query(prompt))
         if results:
+            logger.info(f"Returned {len(results)} results!")
             return results
         logger.info("No suggestions found")
 
