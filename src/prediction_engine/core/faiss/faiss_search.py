@@ -3,7 +3,7 @@ import numpy as np
 import os
 import pickle
 from sentence_transformers import SentenceTransformer
-from src.utils.logger import setup_logger
+from src.prediction_engine.utils.logger import setup_logger
 
 logger = setup_logger()
 

@@ -1,12 +1,12 @@
 import asyncio
 import time
-from src.core.trie.trie import TrieSearch
-from src.core.faiss.faiss_search import FaissSearch
-from src.ranking.ranking import Ranker
-from src.data.history_loader import DataLoader
-from src.core.llm.llm_completion import LLMCompletion
-from src.core.llm.faiss_cache import FaissCache
-from src.utils.logger import setup_logger  # assuming you created logger.py as discussed
+from src.prediction_engine.core.trie.trie import TrieSearch
+from src.prediction_engine.core.faiss.faiss_search import FaissSearch
+from src.prediction_engine.ranking.ranking import Ranker
+from src.prediction_engine.data.history_loader import DataLoader
+from src.prediction_engine.core.llm.llm_completion import LLMCompletion
+from src.prediction_engine.core.llm.faiss_cache import FaissCache
+from src.prediction_engine.utils.logger import setup_logger  # assuming you created logger.py as discussed
 
 logger = setup_logger()
 

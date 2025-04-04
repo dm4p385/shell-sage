@@ -1,7 +1,7 @@
 import os
 import chardet
 import yaml
-from src.utils.logger import setup_logger
+from src.prediction_engine.utils.logger import setup_logger
 
 logger = setup_logger()
 
