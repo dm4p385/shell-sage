@@ -1,5 +1,5 @@
 from collections import Counter
-from src.prediction_engine.utils.logger import setup_logger  # Assumes you’ve created logger.py
+from src.utils.logger import setup_logger  # Assumes you’ve created logger.py
 
 logger = setup_logger()
 

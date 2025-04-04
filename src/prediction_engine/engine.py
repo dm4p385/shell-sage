@@ -6,7 +6,7 @@ from src.prediction_engine.ranking.ranking import Ranker
 from src.prediction_engine.data.history_loader import DataLoader
 from src.prediction_engine.core.llm.llm_completion import LLMCompletion
 from src.prediction_engine.core.llm.faiss_cache import FaissCache
-from src.prediction_engine.utils.logger import setup_logger  # assuming you created logger.py as discussed
+from src.utils.logger import setup_logger  # assuming you created logger.py as discussed
 
 logger = setup_logger()
 
@@ -66,10 +66,11 @@ class ShellSageCore:
 
         final_suggestions = self.ranker.rank(trie_results, faiss_results, llm_results)
 
-        logger.info("Final Ranked Suggestions:")
+        logger.info("Returning Ranked Suggestions...")
         if final_suggestions:
-            for idx, suggestion in enumerate(final_suggestions, 1):
-                logger.info(f"{idx}. {suggestion}")
+            return final_suggestions
+            # for idx, suggestion in enumerate(final_suggestions, 1):
+            #     logger.info(f"{idx}. {suggestion}")
         else:
             logger.warning("No relevant suggestions found.")
 

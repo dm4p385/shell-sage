@@ -1,7 +1,7 @@
 import json
 import ollama
 import asyncio
-from src.prediction_engine.utils.logger import setup_logger
+from src.utils.logger import setup_logger
 
 logger = setup_logger()
 
