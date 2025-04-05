@@ -2,6 +2,10 @@ syntax = "proto3";
 
 package shellsage;
 
+// for go client
+option go_package = "shellsage-client/api-client;api";
+
+
 service ShellSageService {
   // Bi-directional streaming RPC
   rpc Autocomplete(stream PromptRequest) returns (stream SuggestionResponse);
