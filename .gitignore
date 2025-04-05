@@ -3,4 +3,4 @@ commands.pkl
 faiss_index.bin
 faiss_store/
 llm_cache/
-shellsage-client/.idea/
+src/shellsage-client/.idea/
