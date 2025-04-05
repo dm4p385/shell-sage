@@ -2,7 +2,6 @@ package api_client
 
 import (
 	"context"
-	"fmt"
 	"io"
 	//"log"
 	"time"
@@ -18,41 +17,35 @@ const (
 func StreamSuggestions(prompt string) ([]string, error) {
 	conn, err := grpc.Dial(serverAddress, grpc.WithInsecure())
 	if err != nil {
-		return nil, fmt.Errorf("failed to connect: %v", err)
+		return nil, err
 	}
 	defer conn.Close()
 
 	client := NewShellSageServiceClient(conn)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	stream, err := client.Autocomplete(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("error creating stream: %v", err)
+		return nil, err
 	}
 
-	// Send the prompt
 	if err := stream.Send(&PromptRequest{Prompt: prompt}); err != nil {
-		return nil, fmt.Errorf("failed to send prompt: %v", err)
+		return nil, err
 	}
 
-	// You could keep sending more prompts here if needed
-	// stream.Send(&pb.PromptRequest{Prompt: "docker build"}) ...
-
-	// Indicate you're done sending (for now)
 	if err := stream.CloseSend(); err != nil {
-		return nil, fmt.Errorf("error closing send stream: %v", err)
+		return nil, err
 	}
 
-	// Read the response
 	var suggestions []string
 	for {
 		resp, err := stream.Recv()
 		if err == io.EOF {
-			break // Server closed stream
+			break
 		}
 		if err != nil {
-			return nil, fmt.Errorf("error receiving suggestions: %v", err)
+			return nil, err
 		}
 		suggestions = append(suggestions, resp.Suggestions...)
 	}

@@ -3,6 +3,7 @@ module shellsage-client
 go 1.24.2
 
 require (
+	github.com/charmbracelet/bubbles v0.20.0
 	github.com/charmbracelet/bubbletea v1.3.4
 	google.golang.org/grpc v1.71.1
 	google.golang.org/protobuf v1.36.6
